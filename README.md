@@ -1,1 +1,1 @@
-# Bye-Bias-Gender-Equality-Impact-Hackathon
+# Bye-Bias Gender Equality Impact Hackathon
