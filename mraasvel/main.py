@@ -9,9 +9,9 @@ from sklearn.preprocessing import LabelEncoder, OneHotEncoder, StandardScaler
 #from sklearn.cross_validation import train_test_split
 from sklearn.linear_model import LinearRegression
 
-def random_sample(df):
+def random_sample(df, total):
 	seed = int(time.time())
-	df = df.loc[0:75000].sample(1000, random_state=seed) # take random sample
+	df = df.loc[0:75000].sample(total, random_state=seed) # take random sample
 	return df
 
 # replace strings with numbers for analysis (yearscoding only)
@@ -30,6 +30,24 @@ def replace_yearscodingprof(df):
 	return df
 
 def replace_ages(df):
+	df['Age'] = df['Age'].replace(to_replace = ['Under 18'], value = 18)
+	df['Age'] = df['Age'].replace(to_replace = ['18 - 24 years old'], value = 20)
+	df['Age'] = df['Age'].replace(to_replace = ['25 - 34 years old'], value = 30)
+	df['Age'] = df['Age'].replace(to_replace = ['35 - 44 years old'], value = 40)
+	df['Age'] = df['Age'].replace(to_replace = ['45 - 54 years old'], value = 50)
+	df['Age'] = df['Age'].replace(to_replace = ['55 - 64 years old'], value = 59)
+	df['Age'] = df['Age'].replace(to_replace = ['65 years or older'], value = 65)
+	return df
+
+def replace_bootcamp(df):
+	df['TimeAfterBootcamp'] = df['TimeAfterBootcamp'].replace(to_replace = ['I already had a full-time job as a developer when I began the program'], value = 'Before')
+	df['TimeAfterBootcamp'] = df['TimeAfterBootcamp'].replace(to_replace = ['Immediately after graduating'], value = '0')
+	df['TimeAfterBootcamp'] = df['TimeAfterBootcamp'].replace(to_replace = ['Less than a month'], value = '< 1')
+	df['TimeAfterBootcamp'] = df['TimeAfterBootcamp'].replace(to_replace = ['One to three months'], value = '1-3')
+	df['TimeAfterBootcamp'] = df['TimeAfterBootcamp'].replace(to_replace = ['Four to six months'], value = '4-6')
+	df['TimeAfterBootcamp'] = df['TimeAfterBootcamp'].replace(to_replace = ['Six months to a year'], value = '6-12')
+	df['TimeAfterBootcamp'] = df['TimeAfterBootcamp'].replace(to_replace = ['Longer than a year'], value = '12+')
+	df['TimeAfterBootcamp'] = df['TimeAfterBootcamp'].replace(to_replace = ['I haven’t gotten a developer job'], value = 'Never')
 	return df
 
 def	convert_dataset(df):
@@ -60,7 +78,7 @@ def linear_coefficients(df, group):
 	# printing coefficients
 	print("GROUP: ", group)
 	print("Coefficient: ", linear_regressor.coef_)
-	print("Intercept: ", linear_regressor.intercept_)
+	print("Intercept: ", linear_regressor.intercept_, "\n")
 
 	file_name = './graphs/' + group + '.png'
 	plt.savefig(file_name)
@@ -87,27 +105,40 @@ def print_counts(df):
 	return
 
 def get_kinship(df):
-	df = df[['Gender', '421', 'Age']]
+	df = df[['Gender', '421', 'YearsCodingProf']]
 	df = df.dropna()
+	df = replace_yearscodingprof(df)
 	df['421'] = df['421'].astype(int)
 
+	# means hoyp
+	for i in [1, 4, 7, 10, 13, 16, 19, 22, 25, 28, 30]:
+		mdf = df.loc[df['Gender'] == 'Male']
+		fdf = df.loc[df['Gender'] == 'Female']
+		mdf = mdf.loc[df['YearsCodingProf'] == i]
+		fdf = fdf.loc[df['YearsCodingProf'] == i]
+
+		meanm = mdf['421'].mean()
+		meanf = fdf['421'].mean()
+		print("Male average score, with ", i, "years of coding exp: ", meanm)
+		print("Female average score, with", i, "years of coding exp: ", meanf)
+	return
+
+def bootcamp_hyp1(df):
+	df = df[['Gender', 'TimeAfterBootcamp']]
+
+	df = df.dropna()
+
+	df = replace_bootcamp(df)
+
 	mdf = df.loc[df['Gender'] == 'Male']
-	# fdf = df.loc[df['Gender'] == 'Female']
-	# ndf = df.loc[~df['Gender'].isin(['Female', 'Male'])]
+	fdf = df.loc[df['Gender'] == 'Female']
 
 
-	print(mdf['421'])
-	mdf.plot.bar(x = '421')
-	plt.show()
+	# mdf.TimeAfterBootcamp.value_counts().reindex(["Before", "0", "< 1", "1-3", "4-6", "6-12", "12+", "Never"]).plot(kind="bar")
+	# plt.savefig("./graphs/male_bootcamp.png")
+	fdf.TimeAfterBootcamp.value_counts().reindex(["Before", "0", "< 1", "1-3", "4-6", "6-12", "12+", "Never"]).plot(kind="bar")
+	plt.savefig("./graphs/female_bootcamp.png")
 
-
-	# plt.savefig("./graphs/male_ad1.png")
-	# fdf.421.value_counts().reindex(["Under 18 years old", "18 - 24 years old", "25 - 34 years old", "35 - 44 years old", "45 - 54 years old", "55 - 64 years old", "65 years or older"]).plot(kind="bar")
-	# plt.savefig("./graphs/female_ad1.png")
-	# ndf.421.value_counts().reindex(["Under 18 years old", "18 - 24 years old", "25 - 34 years old", "35 - 44 years old", "45 - 54 years old", "55 - 64 years old", "65 years or older"]).plot(kind="bar")
-	# plt.savefig("./graphs/non_mf_ad1.png")
-
-	plt.show()
 	return
 
 
@@ -115,21 +146,21 @@ CSV_FILE = '../megainc.csv'
 # CSV_FILE = '../kfu/megainc.csv'
 groupm = 'Male'
 groupf = 'Female'
-group3 = 'Not Male'
+group3 = 'Not Male or Female'
 
 # load dataset
 df = pd.read_csv(CSV_FILE)
 
-get_kinship(df)
+bootcamp_hyp1(df)
 exit()
 
 # print_counts(df)
 
 # Randomized samples
-# df = random_sample(df)
+# df = random_sample(df, 2500)
 
-edf = df[['Age', 'Gender']]
-edf = edf.dropna()
+# edf = df[['Age', 'Gender']]
+# edf = edf.dropna()
 
 
 # max width
@@ -149,7 +180,7 @@ df = df[['Gender', 'ConvertedSalary', 'YearsCodingProf', 'Age']]
 
 mdf = df.loc[df['Gender'] == 'Male']
 fdf = df.loc[df['Gender'] == 'Female']
-ndf = df.loc[df['Gender'] != 'Male']
+ndf = df.loc[~df['Gender'].isin(['Male', 'Female'])]
 # df = df.loc[df['Gender'].isin(['Male', 'Female'])] # Comparing multiple types using isin
 
 
