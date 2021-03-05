@@ -1,0 +1,12 @@
+GROUP:  Male
+Coefficient:  [[3262.9152394]]
+Intercept:  [38539.94262233] 
+
+GROUP:  Female
+Coefficient:  [[2893.62120811]]
+Intercept:  [45087.51583097] 
+
+GROUP:  Not Male or Female
+Coefficient:  [[2721.64960068]]
+Intercept:  [49322.60317486] 
+
