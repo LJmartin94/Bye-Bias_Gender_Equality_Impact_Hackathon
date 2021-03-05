@@ -16,23 +16,27 @@ def	convert_dataset(df):
 	return df
 
 
+def	oaxaca():
 
+	return 0
+
+CSV_FILE = '../kfu/megainc.csv'
 
 # load dataset
-df = pd.read_csv('survey/data.csv')
+df = pd.read_csv(CSV_FILE)
 
 seed = int(time.time())
-df = df.loc[0:75000].sample(2500, random_state=seed)
-df = df.iloc[:, [56,26,27]]
+df = df.loc[0:75000].sample(2500, random_state=seed) # take random sample
+df = df[['CurrencySymbol', 'Gender', 'ConvertedSalary']]
+
 
 mdf = df.loc[df['Gender'] == 'Male']
-fdf = df.loc[df['Gender'] != 'Male']
+fdf = df.loc[df['Gender'] == 'Female']
 # df = df.loc[df['Gender'].isin(['Male', 'Female'])] # Comparing multiple types using isin
+
 
 mdf = convert_dataset(mdf)
 fdf = convert_dataset(fdf)
-
-
 
 
 fdf.plot(kind='scatter', x = 'Gender', y = 'ConvertedSalary')

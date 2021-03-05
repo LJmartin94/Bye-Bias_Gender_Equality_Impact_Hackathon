@@ -17,3 +17,8 @@ X.iloc[:,1] = labelencoder.fit_transform(X.iloc[:,1])
 Multiple string comparisons:
 
 	df = df.loc[df['Gender'].isin(['Male', 'Female'])] # Comparing multiple types using isin
+
+
+Extract columns:
+
+	df = df.iloc[:, [56,26,27]] # extract column index 56, 26, 27 etc (see index.txt)
