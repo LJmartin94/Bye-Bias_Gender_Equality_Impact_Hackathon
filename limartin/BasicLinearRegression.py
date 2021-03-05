@@ -33,18 +33,57 @@ def replace_yearscodingprof(df):
 
 df = replace_yearscodingprof(df)
 
+df1 = df
 # values converts it into a numpy array: -1 means auto interpret number of rows, 1 means me want 1 column
-X = df.loc[:, 'YearsCodingProf'].values.reshape(-1, 1)  
-Y = df.loc[:, 'ConvertedSalary'].values.reshape(-1, 1)
+X = df1.loc[:, 'YearsCodingProf'].values.reshape(-1, 1)  
+Y = df1.loc[:, 'ConvertedSalary'].values.reshape(-1, 1)
 
 linear_regressor = LinearRegression()  # create object for the class
 linear_regressor.fit(X, Y)  # perform linear regression
 Y_pred = linear_regressor.predict(X)  # make predictions
 
-df.plot(kind='scatter', x='YearsCodingProf', y='ConvertedSalary')
+df1.plot(kind='scatter', x='YearsCodingProf', y='ConvertedSalary')
 plt.plot(X, Y_pred, color='red')
 plt.show()
+print("Coefficient - Extra salary on average per additional year of coding professionally (globally):")
 print(linear_regressor.coef_)
+
+
+df2 = df
+df2 = df.loc[df['Gender'] == 'Male']
+# values converts it into a numpy array: -1 means auto interpret number of rows, 1 means me want 1 column
+X = df2.loc[:, 'YearsCodingProf'].values.reshape(-1, 1)  
+Y = df2.loc[:, 'ConvertedSalary'].values.reshape(-1, 1)
+
+linear_regressor = LinearRegression()  # create object for the class
+linear_regressor.fit(X, Y)  # perform linear regression
+Y_pred = linear_regressor.predict(X)  # make predictions
+
+df2.plot(kind='scatter', x='YearsCodingProf', y='ConvertedSalary')
+plt.plot(X, Y_pred, color='red')
+plt.show()
+print("Coefficient - Extra salary on average per additional year of coding professionally (Male):")
+print(linear_regressor.coef_)
+
+
+df3 = df
+df3 = df.loc[df['Gender'] != 'Male']
+# values converts it into a numpy array: -1 means auto interpret number of rows, 1 means me want 1 column
+X = df3.loc[:, 'YearsCodingProf'].values.reshape(-1, 1)  
+Y = df3.loc[:, 'ConvertedSalary'].values.reshape(-1, 1)
+
+linear_regressor = LinearRegression()  # create object for the class
+linear_regressor.fit(X, Y)  # perform linear regression
+Y_pred = linear_regressor.predict(X)  # make predictions
+
+df3.plot(kind='scatter', x='YearsCodingProf', y='ConvertedSalary')
+plt.plot(X, Y_pred, color='red')
+plt.show()
+print("Coefficient - Extra salary on average per additional year of coding professionally (non Male identifying):")
+print(linear_regressor.coef_)
+
+
+
 
 
 # #Convert the column into categorical columns
