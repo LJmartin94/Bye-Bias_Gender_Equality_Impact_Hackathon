@@ -14,6 +14,8 @@ def random_sample(df, total):
 	df = df.loc[0:75000].sample(total, random_state=seed) # take random sample
 	return df
 
+# Disgusting code, don't look if you want keep your eyes
+
 # replace strings with numbers for analysis (yearscoding only)
 def replace_yearscodingprof(df):
 	df['YearsCodingProf'] = df['YearsCodingProf'].replace(to_replace = ['0-2 years'], value = 1)
@@ -132,18 +134,22 @@ def bootcamp_hyp1(df):
 
 	mdf = df.loc[df['Gender'] == 'Male']
 	fdf = df.loc[df['Gender'] == 'Female']
+	ndf = df.loc[~df['Gender'].isin(['Male', 'Female'])]
 
-
-	# mdf.TimeAfterBootcamp.value_counts().reindex(["Before", "0", "< 1", "1-3", "4-6", "6-12", "12+", "Never"]).plot(kind="bar")
-	# plt.savefig("./graphs/male_bootcamp.png")
+	print(ndf)
+	mdf.TimeAfterBootcamp.value_counts().reindex(["Before", "0", "< 1", "1-3", "4-6", "6-12", "12+", "Never"]).plot(kind="bar")
+	plt.savefig("./graphs/male_bootcamp.png")
 	fdf.TimeAfterBootcamp.value_counts().reindex(["Before", "0", "< 1", "1-3", "4-6", "6-12", "12+", "Never"]).plot(kind="bar")
 	plt.savefig("./graphs/female_bootcamp.png")
-
+	ndf.TimeAfterBootcamp.value_counts().reindex(["Before", "0", "< 1", "1-3", "4-6", "6-12", "12+", "Never"]).plot(kind="bar")
+	plt.savefig("./graphs/none_mf_bootcamp.png")
 	return
 
+def parental_leave(df):
+	return
 
-CSV_FILE = '../megainc.csv'
-# CSV_FILE = '../kfu/megainc.csv'
+# CSV_FILE = '../megainc.csv'
+CSV_FILE = '../kfu/megainc.csv'
 groupm = 'Male'
 groupf = 'Female'
 group3 = 'Not Male or Female'
@@ -151,29 +157,19 @@ group3 = 'Not Male or Female'
 # load dataset
 df = pd.read_csv(CSV_FILE)
 
-bootcamp_hyp1(df)
+parental_leave(df)
 exit()
-
-# print_counts(df)
 
 # Randomized samples
 # df = random_sample(df, 2500)
-
-# edf = df[['Age', 'Gender']]
-# edf = edf.dropna()
 
 
 # max width
 # pd.set_option('display.max_colwidth', None)
 
 # mdf = edf[edf['Gender'].isin(['Male', 'Female'])]
-# mdf = edf[edf['Gender'] == 'Male']
-# fdf = edf[edf['Gender'] == 'Female']
-
 # mdf.Age.value_counts().reindex(["Under 18 years old", "18 - 24 years old", "25 - 34 years old", "35 - 44 years old", "45 - 54 years old", "55 - 64 years old", "65 years or older"]).plot(kind="bar")
 # plt.savefig("./graphs/male_age.png")
-# fdf.Age.value_counts().reindex(["Under 18 years old", "18 - 24 years old", "25 - 34 years old", "35 - 44 years old", "45 - 54 years old", "55 - 64 years old", "65 years or older"]).plot(kind="bar")
-# plt.savefig("./graphs/female_age.png")
 
 df = df[['Gender', 'ConvertedSalary', 'YearsCodingProf', 'Age']]
 
@@ -193,5 +189,3 @@ ndf = convert_dataset(ndf)
 linear_coefficients(mdf, groupm)
 linear_coefficients(fdf, groupf)
 linear_coefficients(ndf, group3)
-
-
