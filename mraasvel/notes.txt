@@ -22,3 +22,36 @@ Multiple string comparisons:
 Extract columns:
 
 	df = df.iloc[:, [56,26,27]] # extract column index 56, 26, 27 etc (see index.txt)
+
+
+Filtering:
+
+	# df = df.loc[df['CurrencySymbol'] == 'USD'] # only locate where CurrencySymbol = USD
+	# df = df.drop(labels = 'CurrencySymbol', axis = 1) # drop means to remove label axis=1 means column
+
+
+
+
+
+Mean:
+
+	print("Male mean exp: ", mdf['YearsCodingProf'].mean())
+
+
+
+DATASET THINGS:
+
+Employment types:
+
+	'Employed full-time', 'Employed part-time', 'Independent contractor, freelancer, or self-employed'
+
+EducationTypes : (still missing)
+
+	'Taken an online course in programming or software development (e.g. a MOOC);Received on-the-job training in software development;Taught yourself a new language, framework, or tool without taking a formal course;Contributed to open source software'
+	'Taught yourself a new language, framework, or tool without taking a formal course;Contributed to open source software'
+	'Received on-the-job training in software development;Taught yourself a new language, framework, or tool without taking a formal course'
+	'Taken an online course in programming or software development (e.g. a MOOC);Received on-the-job training in software development;Participated in online coding competitions (e.g. HackerRank, CodeChef, TopCoder)'
+	'Taken an online course in programming or software development (e.g. a MOOC);Participated in a full-time developer training program or bootcamp;Participated in a hackathon;Contributed to open source software'
+
+
+Respondent,Hobby,OpenSource,Country,Student,Employment,FormalEducation,UndergradMajor,DevType,YearsCoding,YearsCodingProf,JobSatisfaction,CareerSatisfaction,HopeFiveYears,AssessBenefits1,AssessBenefits2,AssessBenefits3,AssessBenefits4,AssessBenefits5,AssessBenefits6,AssessBenefits7,AssessBenefits8,AssessBenefits9,AssessBenefits10,AssessBenefits11,Salary,ConvertedSalary,CurrencySymbol,CommunicationTools,EducationTypes,SelfTaughtTypes,TimeAfterBootcamp,HackathonReasons,421,422,423,LanguageWorkedWith,LanguageDesireNextYear,DatabaseWorkedWith,DatabaseDesireNextYear,PlatformWorkedWith,PlatformDesireNextYear,FrameworkWorkedWith,FrameworkDesireNextYear,IDE,OperatingSystem,NumberMonitors,EthicsChoice,EthicsReport,EthicsResponsible,EthicalImplications,WakeTime,HoursComputer,HoursOutside,SkipMeals,Exercise,Gender,SexualOrientation,EducationParents,RaceEthnicity,Age,Dependents
